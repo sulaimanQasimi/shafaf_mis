@@ -14,15 +14,17 @@
             $fetch_001 = mysqli_fetch_assoc($sql_query_001);
             $_SESSION["username"] = $fetch_001["user_name"];
             $_SESSION["password"] = base64_decode($fetch_001["password"]);
-        
-           
             $_SESSION["employee_id"] = $fetch_001["employee_id"];
 
             echo "success";
         }
         else
         {
-            echo "failed";
+            echo json_encode([
+                'status' => 'error',
+                'username' => $login_username,
+                'password' => $password
+            ],JSON_UNESCAPED_UNICODE);
         }
 
         exit();

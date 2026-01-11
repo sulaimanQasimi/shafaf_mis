@@ -1,0 +1,93 @@
+# PHP
+*.log
+*.cache
+*.tmp
+*.temp
+composer.phar
+/vendor/
+composer.lock
+
+# Database Configuration (if you create a template)
+# database.php
+# Keep database.php.example instead
+
+# Uploaded Files
+stuff_documents/images/*
+!stuff_documents/images/.gitkeep
+stuff_documents/documents/*
+!stuff_documents/documents/.gitkeep
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+*~
+.directory
+.Trash-*
+
+# Logs
+*.log
+logs/
+error_log
+access_log
+
+# Temporary Files
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+
+# Session Files
+sessions/
+*.session
+
+# Cache
+cache/
+*.cache
+
+# Environment Files
+.env
+.env.local
+.env.*.local
+config.local.php
+
+# Node modules (if any frontend build tools are used)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Build files
+dist/
+build/
+
+# Test files
+test-results/
+coverage/
+
+# Backup files
+*.sql.bak
+*.sql.backup
+database_backup/

@@ -4,7 +4,6 @@
 
   if($connection)
   {
-
   }
   else
   {
