@@ -824,6 +824,90 @@
         exit();
         
     }
+
+    if(isset($_POST["company_name"]))
+    {
+        $company_name = $_POST["company_name"];
+        $company_address = $_POST["company_address"];
+        $company_phone = $_POST["company_phone"];
+        $edit = $_POST["edit"];
+        $date = date("Y-m-d");
+
+        // Handle logo upload
+        $logoUpload = "";
+        if(isset($_FILES['company_logo']) && $_FILES['company_logo']['name'] != "")
+        {
+            $logoUpload = $_FILES['company_logo']['name'];
+            $logoSource = $_FILES['company_logo']['tmp_name'];
+            $logoTarget = 'stuff_documents/images/'.$_FILES['company_logo']['name'];
+            move_uploaded_file($logoSource, $logoTarget);
+        }
+        else
+        {
+            // If no new logo uploaded, get existing logo
+            if($edit != "")
+            {
+                $sql_query_check = mysqli_query($connection,"SELECT company_logo FROM company_settings WHERE id='$edit'");
+                $fetch_check = mysqli_fetch_assoc($sql_query_check);
+                $logoUpload = $fetch_check["company_logo"];
+            }
+        }
+        
+        if($edit == "")
+        {
+            $sql_query_001 = mysqli_query($connection,"INSERT INTO `company_settings` (`id`, `company_name`, `company_address`, `company_phone`, `company_logo`, `date`) VALUES (NULL, '$company_name', '$company_address', '$company_phone', '$logoUpload', '$date')");
+
+            if ($sql_query_001)
+            {
+                echo "success-";
+            }
+            else
+            {
+                echo "failed-";
+            }
+        }
+        else
+        {
+            if($logoUpload != "")
+            {
+                $sql_query_001 = mysqli_query($connection,"UPDATE company_settings SET company_name='$company_name',company_address='$company_address',company_phone='$company_phone',company_logo='$logoUpload' WHERE id='$edit'");
+            }
+            else
+            {
+                $sql_query_001 = mysqli_query($connection,"UPDATE company_settings SET company_name='$company_name',company_address='$company_address',company_phone='$company_phone' WHERE id='$edit'");
+            }
+            
+            if ($sql_query_001)
+            {
+                echo "success - register_company_settings.php";
+            }
+            else
+            {
+                echo "failed - register_company_settings.php";
+            }
+        }
+
+        exit();
+        
+    }
+
+    if(isset($_POST["get_company_settings"]))
+    {
+        $sql_query_001 = mysqli_query($connection,"SELECT * FROM `company_settings` ORDER BY id DESC LIMIT 1");
+        
+        if(mysqli_num_rows($sql_query_001) > 0)
+        {
+            $fetch_001 = mysqli_fetch_assoc($sql_query_001);
+            print_r(json_encode($fetch_001));
+        }
+        else
+        {
+            echo json_encode([]);
+        }
+
+        exit();
+        
+    }
     
     
 ?>

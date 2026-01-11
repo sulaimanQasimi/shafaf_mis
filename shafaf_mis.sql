@@ -264,6 +264,21 @@ INSERT INTO `user_account` (`id`, `employee_id`, `user_name`, `password`, `autho
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `company_settings`
+--
+
+CREATE TABLE `company_settings` (
+  `id` int(11) NOT NULL,
+  `company_name` varchar(150) COLLATE utf8mb4_persian_ci NOT NULL,
+  `company_address` text COLLATE utf8mb4_persian_ci NOT NULL,
+  `company_phone` varchar(20) COLLATE utf8mb4_persian_ci NOT NULL,
+  `company_logo` varchar(150) COLLATE utf8mb4_persian_ci NOT NULL,
+  `date` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Stand-in structure for view `view_list_of_sales`
 -- (See below for the actual view)
 --
@@ -390,6 +405,12 @@ ALTER TABLE `unit_minor`
 -- Indexes for table `user_account`
 --
 ALTER TABLE `user_account`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `company_settings`
+--
+ALTER TABLE `company_settings`
   ADD PRIMARY KEY (`id`);
 COMMIT;
 

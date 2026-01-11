@@ -1,8 +1,26 @@
+<?php
+include("database.php");
+
+// Get company settings
+$sql_query_company = mysqli_query($connection,"SELECT * FROM company_settings ORDER BY id DESC LIMIT 1");
+$company_settings = array();
+if(mysqli_num_rows($sql_query_company) > 0)
+{
+    $company_settings = mysqli_fetch_assoc($sql_query_company);
+    $company_name = $company_settings["company_name"];
+    $company_logo = $company_settings["company_logo"];
+}
+else
+{
+    $company_name = "shafaf MIS";
+    $company_logo = "";
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title>shafaf MIS</title>
+        <title><?php echo $company_name; ?></title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
         <meta content="Coderthemes" name="author" />
@@ -41,8 +59,14 @@
                             <div class="card-body p-4">
                                 
                                 <div class="text-center mb-4">
-                                    <a href="index.html">
-                                        <span><img src="assets/images/logo-dark.png" alt="" height="28"></span>
+                                    <a href="index.php">
+                                        <span>
+                                            <?php if($company_logo != "") { ?>
+                                                <img src="stuff_documents/images/<?php echo $company_logo; ?>" alt="<?php echo $company_name; ?>" height="28">
+                                            <?php } else { ?>
+                                                <img src="assets/images/logo-dark.png" alt="<?php echo $company_name; ?>" height="28">
+                                            <?php } ?>
+                                        </span>
                                     </a>
                                 </div>
 

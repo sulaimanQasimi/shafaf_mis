@@ -1,5 +1,20 @@
 <?php
     include_once("database.php");
+    
+    // Get company settings
+    $sql_query_company = mysqli_query($connection,"SELECT * FROM company_settings ORDER BY id DESC LIMIT 1");
+    $company_settings = array();
+    if(mysqli_num_rows($sql_query_company) > 0)
+    {
+        $company_settings = mysqli_fetch_assoc($sql_query_company);
+        $company_name = $company_settings["company_name"];
+        $company_logo = $company_settings["company_logo"];
+    }
+    else
+    {
+        $company_name = "shafaf MIS";
+        $company_logo = "";
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -90,7 +105,11 @@
                             <!-- Logo & title -->
                             <div class="clearfix">
                                 <div class="float-left">
-                                    <img src="assets/images/logo-dark.png" alt="" height="20">
+                                    <?php if($company_logo != "") { ?>
+                                        <img src="stuff_documents/images/<?php echo $company_logo; ?>" alt="<?php echo $company_name; ?>" height="20">
+                                    <?php } else { ?>
+                                        <img src="assets/images/logo-dark.png" alt="<?php echo $company_name; ?>" height="20">
+                                    <?php } ?>
                                 </div>
                                 <div class="float-right">
                                     <p class="m-0 bill_number">نمبر بل : 125</p>

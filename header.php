@@ -7,6 +7,21 @@ $emp_id = $_SESSION["employee_id"];
 $sql_query_001 = mysqli_query($connection,"select id,full_name,image from staff where id='$emp_id'");
 $fetch_001 = mysqli_fetch_assoc($sql_query_001);
 
+// Get company settings
+$sql_query_company = mysqli_query($connection,"SELECT * FROM company_settings ORDER BY id DESC LIMIT 1");
+$company_settings = array();
+if(mysqli_num_rows($sql_query_company) > 0)
+{
+    $company_settings = mysqli_fetch_assoc($sql_query_company);
+    $company_name = $company_settings["company_name"];
+    $company_logo = $company_settings["company_logo"];
+}
+else
+{
+    $company_name = "shafaf MIS";
+    $company_logo = "";
+}
+
 ?>
 <style>
 
@@ -16,7 +31,7 @@ $fetch_001 = mysqli_fetch_assoc($sql_query_001);
         font-weight: bold;
     }
 </style>
-<title>shafaf mis</title>
+<title><?php echo $company_name; ?></title>
 
 <header id="topnav">
 
@@ -71,10 +86,18 @@ $fetch_001 = mysqli_fetch_assoc($sql_query_001);
                         <li class="float-left logo-box">
                             <a href="home.php" class="logo">
                                 <span class="logo-lg">
-                                    <img src="assets/images/logo-light.png" alt="" height="22">
+                                    <?php if($company_logo != "") { ?>
+                                        <img src="stuff_documents/images/<?php echo $company_logo; ?>" alt="<?php echo $company_name; ?>" height="22">
+                                    <?php } else { ?>
+                                        <img src="assets/images/logo-light.png" alt="<?php echo $company_name; ?>" height="22">
+                                    <?php } ?>
                                 </span>
                                 <span class="logo-sm">
-                                    <img src="assets/images/logo-sm.png" alt="" height="24">
+                                    <?php if($company_logo != "") { ?>
+                                        <img src="stuff_documents/images/<?php echo $company_logo; ?>" alt="<?php echo $company_name; ?>" height="24">
+                                    <?php } else { ?>
+                                        <img src="assets/images/logo-sm.png" alt="<?php echo $company_name; ?>" height="24">
+                                    <?php } ?>
                                 </span>
                             </a>
                         </li>
@@ -240,6 +263,15 @@ $fetch_001 = mysqli_fetch_assoc($sql_query_001);
                                     
                                 </ul>
                             </li> -->
+                            <li class="has-submenu">
+                                <a href="#" class="lang" key="settings">
+                                    <i class="mdi mdi-settings"></i>تنظیمات<div class="arrow-down"></div></a>
+                                <ul class="submenu">
+                                    <li>
+                                        <a href="register_company_settings.php">تنظیمات شرکت</a>
+                                    </li>
+                                </ul>
+                            </li>
                             <li class="has-submenu">
                                 <a href="#" class="lang" key="units">
                                     <i class="mdi mdi-format-list-checkbox"></i><div class="arrow-down"></div></a>
