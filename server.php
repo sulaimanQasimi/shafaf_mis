@@ -827,17 +827,17 @@
 
     if(isset($_POST["company_name"]))
     {
-        $company_name = $_POST["company_name"];
-        $company_address = $_POST["company_address"];
-        $company_phone = $_POST["company_phone"];
-        $edit = $_POST["edit"];
+        $company_name = mysqli_real_escape_string($connection, $_POST["company_name"]);
+        $company_address = mysqli_real_escape_string($connection, $_POST["company_address"]);
+        $company_phone = mysqli_real_escape_string($connection, $_POST["company_phone"]);
+        $edit = mysqli_real_escape_string($connection, $_POST["edit"]);
         $date = date("Y-m-d");
 
         // Handle logo upload
         $logoUpload = "";
         if(isset($_FILES['company_logo']) && $_FILES['company_logo']['name'] != "")
         {
-            $logoUpload = $_FILES['company_logo']['name'];
+            $logoUpload = mysqli_real_escape_string($connection, $_FILES['company_logo']['name']);
             $logoSource = $_FILES['company_logo']['tmp_name'];
             $logoTarget = 'stuff_documents/images/'.$_FILES['company_logo']['name'];
             move_uploaded_file($logoSource, $logoTarget);
@@ -848,22 +848,32 @@
             if($edit != "")
             {
                 $sql_query_check = mysqli_query($connection,"SELECT company_logo FROM company_settings WHERE id='$edit'");
-                $fetch_check = mysqli_fetch_assoc($sql_query_check);
-                $logoUpload = $fetch_check["company_logo"];
+                if($sql_query_check && mysqli_num_rows($sql_query_check) > 0)
+                {
+                    $fetch_check = mysqli_fetch_assoc($sql_query_check);
+                    $logoUpload = $fetch_check["company_logo"];
+                }
             }
         }
         
         if($edit == "")
         {
-            $sql_query_001 = mysqli_query($connection,"INSERT INTO `company_settings` (`id`, `company_name`, `company_address`, `company_phone`, `company_logo`, `date`) VALUES (NULL, '$company_name', '$company_address', '$company_phone', '$logoUpload', '$date')");
+            // Ensure logoUpload is not empty (use empty string if no logo)
+            if($logoUpload == "")
+            {
+                $logoUpload = "";
+            }
+            
+            $sql_query_001 = mysqli_query($connection,"INSERT INTO `company_settings` (`company_name`, `company_address`, `company_phone`, `company_logo`, `date`) VALUES ('$company_name', '$company_address', '$company_phone', '$logoUpload', '$date')");
 
             if ($sql_query_001)
             {
-                echo "success-";
+                echo "success";
             }
             else
             {
-                echo "failed-";
+                $error = mysqli_error($connection);
+                echo "failed: " . $error;
             }
         }
         else
@@ -879,11 +889,11 @@
             
             if ($sql_query_001)
             {
-                echo "success - register_company_settings.php";
+                echo "success";
             }
             else
             {
-                echo "failed - register_company_settings.php";
+                echo "failed: " . mysqli_error($connection);
             }
         }
 

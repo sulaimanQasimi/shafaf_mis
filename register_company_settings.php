@@ -209,7 +209,8 @@
                             processData:false,
                             success: function(data)
                             {
-                            if(data.trim() == 'success' || data.trim().includes('success'))
+                            var response = data.trim();
+                            if(response == 'success' || response.includes('success'))
                             {
                                 document.getElementById("uploadForm").reset();
     
@@ -230,12 +231,16 @@
                             }
                             else
                             {
-                                document.getElementById("uploadForm").reset();
+                                var errorMsg = 'خطا در ثبت اطلاعات !';
+                                if(response.includes('failed:'))
+                                {
+                                    errorMsg = 'خطا: ' + response.split('failed:')[1];
+                                }
 
                                 $.toast({
                                     heading: ' پاسخ ',
-                                    text: 'خطا در ثبت اطلاعات !',
-                                    icon: 'info',
+                                    text: errorMsg,
+                                    icon: 'error',
                                     loader: true,  
                                     position: 'top-right',      // Change it to false to disable loader
                                     loaderBg: '#9EC600',

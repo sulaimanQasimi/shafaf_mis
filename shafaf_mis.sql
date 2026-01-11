@@ -6,6 +6,9 @@
 -- Generation Time: Jan 10, 2026 at 04:20 PM
 -- Server version: 10.1.24-MariaDB
 -- PHP Version: 7.1.6
+DROP DATABASE IF EXISTS `shafaf_mis`;
+CREATE DATABASE `shafaf_mis`;
+USE `shafaf_mis`;
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -268,12 +271,13 @@ INSERT INTO `user_account` (`id`, `employee_id`, `user_name`, `password`, `autho
 --
 
 CREATE TABLE `company_settings` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `company_name` varchar(150) COLLATE utf8mb4_persian_ci NOT NULL,
   `company_address` text COLLATE utf8mb4_persian_ci NOT NULL,
   `company_phone` varchar(20) COLLATE utf8mb4_persian_ci NOT NULL,
   `company_logo` varchar(150) COLLATE utf8mb4_persian_ci NOT NULL,
-  `date` date NOT NULL
+  `date` date NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 
 -- --------------------------------------------------------
@@ -409,9 +413,8 @@ ALTER TABLE `user_account`
 
 --
 -- Indexes for table `company_settings`
+-- (Primary key already defined in CREATE TABLE)
 --
-ALTER TABLE `company_settings`
-  ADD PRIMARY KEY (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
