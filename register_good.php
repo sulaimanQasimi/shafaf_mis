@@ -319,33 +319,35 @@
                                 });
                                  if(url != "")
                                 {
-                                    window.open(''+url,'_self');
+                                    setTimeout(function(){
+                                        window.open(''+url,'_self');
+                                    }, 1000);
                                 }
                                 else
                                 {
-
+                                    setTimeout(function(){
+                                        location.reload();
+                                    }, 1000);
                                 }
                             }
                             else
                             {
+                                var errorMsg = 'خطا در ثبت اطلاعات !';
+                                if(data.includes('failed-:'))
+                                {
+                                    errorMsg = 'خطا: ' + data.split('failed-:')[1];
+                                }
+                                
                                 $.toast({
                                     heading: ' پاسخ ',
-                                    text: 'اطلاعات شما موفقانه در سیستم ذخیره گردید ',
-                                    icon: 'success',
+                                    text: errorMsg,
+                                    icon: 'error',
                                     loader: true,  
                                     position: 'top-right',      // Change it to false to disable loader
                                     loaderBg: '#9EC600',
-                                    bgColor: '#34A853',
+                                    bgColor: '#ff0000',
                                     textColor: 'white' // To change the background
                                 });
-                                 if(url != "")
-                                {
-                                    window.open(''+url,'_self');
-                                }
-                                else
-                                {
-
-                                }
                             }	
                             },
                             error: function() 

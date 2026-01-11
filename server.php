@@ -212,14 +212,14 @@
 
     if(isset($_POST["good_name"]))
     {
-        $good_name = $_POST["good_name"];
-        $edit = $_POST["edit"];
+        $good_name = mysqli_real_escape_string($connection, $_POST["good_name"]);
+        $edit = mysqli_real_escape_string($connection, $_POST["edit"]);
         
         
       
         if($edit == "")
         {
-            $sql_query_001 = mysqli_query($connection,"INSERT INTO `stock_minor` (`id`, `item_name`) VALUES (NULL, '$good_name')");
+            $sql_query_001 = mysqli_query($connection,"INSERT INTO `stock_minor` (`item_name`) VALUES ('$good_name')");
 
 
             if ($sql_query_001)
@@ -228,7 +228,7 @@
             }
             else
             {
-                echo "failed-";
+                echo "failed-: " . mysqli_error($connection);
             }
         }
         else
@@ -240,7 +240,7 @@
             }
             else
             {
-                echo "failed - registered_goods.php";
+                echo "failed - registered_goods.php: " . mysqli_error($connection);
             }
         }
 

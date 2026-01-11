@@ -32,9 +32,10 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `currencies` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(150) COLLATE utf8mb4_persian_ci NOT NULL,
-  `base` int(10) NOT NULL
+  `base` int(10) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 
 --
@@ -52,11 +53,12 @@ INSERT INTO `currencies` (`id`, `name`, `base`) VALUES
 --
 
 CREATE TABLE `customers` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `full_name` varchar(150) COLLATE utf8mb4_persian_ci NOT NULL,
   `phone_number` varchar(20) COLLATE utf8mb4_persian_ci NOT NULL,
   `address` text COLLATE utf8mb4_persian_ci NOT NULL,
-  `date` date NOT NULL
+  `date` date NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 
 -- --------------------------------------------------------
@@ -66,13 +68,16 @@ CREATE TABLE `customers` (
 --
 
 CREATE TABLE `expenses` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `ex_cate_id` int(50) NOT NULL,
   `details` text COLLATE utf8mb4_persian_ci NOT NULL,
   `amount` float NOT NULL,
   `rate` float NOT NULL,
   `currenycy_id` int(50) NOT NULL,
-  `date` date NOT NULL
+  `date` date NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `to_ex_cat` (`ex_cate_id`),
+  KEY `to_currency_id_1` (`currenycy_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 
 -- --------------------------------------------------------
@@ -82,8 +87,9 @@ CREATE TABLE `expenses` (
 --
 
 CREATE TABLE `expenses_categories` (
-  `id` int(11) NOT NULL,
-  `name` varchar(150) COLLATE utf8mb4_persian_ci NOT NULL
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(150) COLLATE utf8mb4_persian_ci NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 
 -- --------------------------------------------------------
@@ -93,11 +99,14 @@ CREATE TABLE `expenses_categories` (
 --
 
 CREATE TABLE `purchase_major` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `supplier_id` int(50) DEFAULT NULL,
   `reciept` float NOT NULL,
   `currency_id` int(50) NOT NULL,
-  `date` date NOT NULL
+  `date` date NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `to_supplier_id_1` (`supplier_id`),
+  KEY `to_currency_id_2` (`currency_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 
 -- --------------------------------------------------------
@@ -107,13 +116,14 @@ CREATE TABLE `purchase_major` (
 --
 
 CREATE TABLE `purchase_minor` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `purchase_major_id` int(50) NOT NULL,
   `item_id_stock_major` int(50) NOT NULL,
   `amount` float NOT NULL,
   `purchase_price` float NOT NULL,
   `extra_expense` int(11) NOT NULL,
-  `details` text COLLATE utf8mb4_persian_ci NOT NULL
+  `details` text COLLATE utf8mb4_persian_ci NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 
 -- --------------------------------------------------------
@@ -123,7 +133,7 @@ CREATE TABLE `purchase_minor` (
 --
 
 CREATE TABLE `reciepts` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `full_name` varchar(150) COLLATE utf8mb4_persian_ci NOT NULL,
   `amount` float NOT NULL,
   `currency_id` int(150) NOT NULL,
@@ -131,7 +141,8 @@ CREATE TABLE `reciepts` (
   `purchase_id` int(150) DEFAULT NULL,
   `sale_id` int(150) DEFAULT NULL,
   `date` date NOT NULL,
-  `details` text COLLATE utf8mb4_persian_ci NOT NULL
+  `details` text COLLATE utf8mb4_persian_ci NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 
 -- --------------------------------------------------------
@@ -141,11 +152,12 @@ CREATE TABLE `reciepts` (
 --
 
 CREATE TABLE `sale_major` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `customer_id` int(50) NOT NULL,
   `reciept` float NOT NULL,
   `currency_id` int(50) NOT NULL,
-  `date` date NOT NULL
+  `date` date NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 
 -- --------------------------------------------------------
@@ -155,12 +167,13 @@ CREATE TABLE `sale_major` (
 --
 
 CREATE TABLE `sale_minor` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `amount` float NOT NULL,
   `sale_rate` float NOT NULL,
   `details` text COLLATE utf8mb4_persian_ci NOT NULL,
   `purchase_minor_id` int(100) NOT NULL,
-  `sale_major_id` int(50) NOT NULL
+  `sale_major_id` int(50) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 
 -- --------------------------------------------------------
@@ -170,12 +183,13 @@ CREATE TABLE `sale_minor` (
 --
 
 CREATE TABLE `staff` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `full_name` varchar(150) COLLATE utf8mb4_persian_ci NOT NULL,
   `phone_number` varchar(20) COLLATE utf8mb4_persian_ci NOT NULL,
   `address` text COLLATE utf8mb4_persian_ci NOT NULL,
   `image` varchar(150) COLLATE utf8mb4_persian_ci NOT NULL,
-  `date` date NOT NULL
+  `date` date NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 
 -- --------------------------------------------------------
@@ -185,11 +199,12 @@ CREATE TABLE `staff` (
 --
 
 CREATE TABLE `stock_major` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `item_id` int(50) NOT NULL,
   `amount` float NOT NULL,
   `unit_id` int(50) NOT NULL,
-  `minor_unit_id` int(50) NOT NULL
+  `minor_unit_id` int(50) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 
 -- --------------------------------------------------------
@@ -199,8 +214,9 @@ CREATE TABLE `stock_major` (
 --
 
 CREATE TABLE `stock_minor` (
-  `id` int(11) NOT NULL,
-  `item_name` varchar(150) COLLATE utf8mb4_persian_ci NOT NULL
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `item_name` varchar(150) COLLATE utf8mb4_persian_ci NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 
 -- --------------------------------------------------------
@@ -210,11 +226,12 @@ CREATE TABLE `stock_minor` (
 --
 
 CREATE TABLE `suppliers` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `full_name` varchar(150) CHARACTER SET utf8 NOT NULL,
   `phone_number` varchar(20) CHARACTER SET utf8mb4 NOT NULL,
   `address` text CHARACTER SET utf8mb4 NOT NULL,
-  `date` date NOT NULL
+  `date` date NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 
 -- --------------------------------------------------------
@@ -224,8 +241,9 @@ CREATE TABLE `suppliers` (
 --
 
 CREATE TABLE `unit_major` (
-  `id` int(11) NOT NULL,
-  `unit_name` varchar(150) COLLATE utf8mb4_persian_ci NOT NULL
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `unit_name` varchar(150) COLLATE utf8mb4_persian_ci NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 
 -- --------------------------------------------------------
@@ -235,11 +253,12 @@ CREATE TABLE `unit_major` (
 --
 
 CREATE TABLE `unit_minor` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `unit_major_id` int(50) NOT NULL,
   `unit_name` varchar(150) COLLATE utf8mb4_persian_ci NOT NULL,
   `pack_quantity` float NOT NULL,
-  `major_factor` float NOT NULL
+  `major_factor` float NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 
 -- --------------------------------------------------------
@@ -249,11 +268,12 @@ CREATE TABLE `unit_minor` (
 --
 
 CREATE TABLE `user_account` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `employee_id` int(50) NOT NULL,
   `user_name` varchar(150) COLLATE utf8mb4_persian_ci NOT NULL,
   `password` varchar(150) COLLATE utf8mb4_persian_ci NOT NULL,
-  `authority` varchar(150) COLLATE utf8mb4_persian_ci NOT NULL
+  `authority` varchar(150) COLLATE utf8mb4_persian_ci NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 
 --
@@ -312,104 +332,9 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 
 --
--- Indexes for table `currencies`
+-- Indexes for dumped tables
+-- (Primary keys and indexes already defined in CREATE TABLE statements)
 --
-ALTER TABLE `currencies`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `customers`
---
-ALTER TABLE `customers`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `expenses`
---
-ALTER TABLE `expenses`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `to_ex_cat` (`ex_cate_id`),
-  ADD KEY `to_currency_id_1` (`currenycy_id`);
-
---
--- Indexes for table `expenses_categories`
---
-ALTER TABLE `expenses_categories`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `purchase_major`
---
-ALTER TABLE `purchase_major`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `to_supplier_id_1` (`supplier_id`),
-  ADD KEY `to_currency_id_2` (`currency_id`);
-
---
--- Indexes for table `purchase_minor`
---
-ALTER TABLE `purchase_minor`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `reciepts`
---
-ALTER TABLE `reciepts`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `sale_major`
---
-ALTER TABLE `sale_major`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `sale_minor`
---
-ALTER TABLE `sale_minor`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `staff`
---
-ALTER TABLE `staff`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `stock_major`
---
-ALTER TABLE `stock_major`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `stock_minor`
---
-ALTER TABLE `stock_minor`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `suppliers`
---
-ALTER TABLE `suppliers`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `unit_major`
---
-ALTER TABLE `unit_major`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `unit_minor`
---
-ALTER TABLE `unit_minor`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `user_account`
---
-ALTER TABLE `user_account`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `company_settings`
