@@ -270,6 +270,9 @@ else
                                     <li>
                                         <a href="register_company_settings.php">تنظیمات شرکت</a>
                                     </li>
+                                    <li>
+                                        <a href="database_backup.php">پشتیبان‌گیری از پایگاه داده</a>
+                                    </li>
                                 </ul>
                             </li>
                             <li class="has-submenu">
