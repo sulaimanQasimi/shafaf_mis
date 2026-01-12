@@ -107,7 +107,7 @@
                         <li class="breadcrumb-item active">صفحه بل خرید</li>
                     </ol>
                 </div>
-                <p class="page-title">صفحه بل خرید</pack>
+                <p class="page-title">صفحه بل خرید</p>
             </div>
             <!-- end page title -->
 
@@ -138,13 +138,13 @@
 
                                 <datalist id="items_list">
                                     <?php
-                                            $sql_query_01 = mysqli_query($connection,"SELECT stock_major.id,(SELECT stock_minor.item_name FROM stock_minor WHERE stock_minor.id = stock_major.item_id) as item_name,stock_major.amount,(SELECT unit_major.unit_name FROM unit_major WHERE unit_major.id = stock_major.unit_id) as unit_name  FROM `stock_major` ");
+                                            $sql_query_01 = mysqli_query($connection,"SELECT stock_minor.id, stock_minor.item_name FROM `stock_minor` ORDER BY stock_minor.item_name");
                                             while ($row = mysqli_fetch_assoc($sql_query_01))
                                             {
                                         ?>
 
                                     <option value="<?php echo $row["id"]; ?>">
-                                        <?php echo $row["item_name"].' - '. $row["unit_name"]; ?></option>
+                                        <?php echo $row["item_name"]; ?></option>
                                     <?php
                                             }
                                         ?>
@@ -292,9 +292,8 @@
 
     <!-- Vendor js -->
     <!-- <script src="assets/js/vendor.min.js"></script> -->
-    <script src="assets/js/bootstrap.js"></script>
     <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/libs/bootstrap-select/bootstrap-select.min.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
     <script src="assets/libs/bootstrap-select/bootstrap-select.min.js"></script>
     <!-- persian datepicker js -->
     <script src="assets/js/persian-datepicker.js"></script>
@@ -310,9 +309,14 @@
     var count_2 = 1;
 
     $(function() {
-        $("#search_input_id").on("search", function() {
+        $("#search_input_id").on("change", function() {
 
             var search_input_id = $("#search_input_id").val();
+            
+            // Don't proceed if input is empty
+            if (!search_input_id || search_input_id.trim() === "") {
+                return;
+            }
 
             $.ajax({
                 type: "POST",
@@ -322,46 +326,61 @@
                 },
                 url: "server.php",
                 success: function(response_x1) {
-                    var responses_x1 = JSON.parse(response_x1);
+                    try {
+                        var responses_x1 = JSON.parse(response_x1);
+                        
+                        // Check if response is valid
+                        if (!responses_x1 || !responses_x1["item_name"]) {
+                            alert("جنس پیدا نشد. لطفاً دوباره تلاش کنید.");
+                            return;
+                        }
 
-                    var row =
-                        "<tr id='row_id_" + count_2 + "'>";
-                    row += "<td class='idss'>" + count_2 + "</td>";
-                    row +=
-                        "<td><input type='text' class='form-control' readonly name='purchase_item_name' value='" +
-                        responses_x1["item_name"] +
-                        "' /><input type='hidden' class='form-control' readonly name='major_stock_id' value='" +
-                        responses_x1["id"] + "' /></td>";
-                    row +=
-                        "<td><input type='text' class='form-control' readonly name='unit_name' value='" +
-                        responses_x1["unit_name"] +
-                        "' /></td>";
-                    row +=
-                        "<td><input type='text' class='form-control amount'  name='amount' id='amount_" +
-                        count_2 + "'  value='0' /></td>";
-                    row +=
-                        "<td><input type='text' class='form-control purchase_price' id='purchase_price_" +
-                        count_2 + "' name='purchase_price' value='0' /></td>";
-                    row +=
-                        "<td><input type='text' class='form-control extra_expense'  name='extra_expense' id='extra_expense_" +
-                        count_2 + "'  value='0' /></td>";
-                    row +=
-                        "<td><input type='text' class='form-control row_total' readonly name='row_total' id='row_total_" +
-                        count_2 + "' value='0' /></td>";
-                    row +=
-                        "<td class='text-right print-display'><textarea name='details'></textarea></td>";
-                    row +=
-                        "<td class='text-center print-display'><span class='fa fa-trash text text-danger delete_btn' id='" +
-                        count_2 + "'></span></td>";
-                    row += "</tr>";
+                        var row =
+                            "<tr id='row_id_" + count_2 + "'>";
+                        row += "<td class='idss'>" + count_2 + "</td>";
+                        row +=
+                            "<td><input type='text' class='form-control' readonly name='purchase_item_name' value='" +
+                            responses_x1["item_name"] +
+                            "' /><input type='hidden' class='form-control' readonly name='major_stock_id' value='" +
+                            responses_x1["id"] + "' /></td>";
+                        row +=
+                            "<td><input type='text' class='form-control' readonly name='unit_name' value='" +
+                            responses_x1["unit_name"] +
+                            "' /></td>";
+                        row +=
+                            "<td><input type='text' class='form-control amount'  name='amount' id='amount_" +
+                            count_2 + "'  value='0' /></td>";
+                        row +=
+                            "<td><input type='text' class='form-control purchase_price' id='purchase_price_" +
+                            count_2 + "' name='purchase_price' value='0' /></td>";
+                        row +=
+                            "<td><input type='text' class='form-control extra_expense'  name='extra_expense' id='extra_expense_" +
+                            count_2 + "'  value='0' /></td>";
+                        row +=
+                            "<td><input type='text' class='form-control row_total' readonly name='row_total' id='row_total_" +
+                            count_2 + "' value='0' /></td>";
+                        row +=
+                            "<td class='text-right print-display'><textarea name='details'></textarea></td>";
+                        row +=
+                            "<td class='text-center print-display'><span class='fa fa-trash text text-danger delete_btn' id='" +
+                            count_2 + "'></span></td>";
+                        row += "</tr>";
 
 
-                    $("#bill_tbody").append(row);
-                    total_cal(count_2);
-                    count_2++;
+                        $("#bill_tbody").append(row);
+                        total_cal(count_2);
+                        count_2++;
 
 
-                    $("#search_input_id").val("");
+                        $("#search_input_id").val("");
+                    } catch (e) {
+                        console.error("Error parsing response:", e);
+                        alert("خطا در دریافت اطلاعات. لطفاً دوباره تلاش کنید.");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX Error:", error);
+                    alert("خطا در ارتباط با سرور. لطفاً دوباره تلاش کنید.");
                 }
             });
 
@@ -483,7 +502,7 @@
     $("#button_submit").on("click", function() {
         var currency = $("#currency").val();
         var rate = $("#rate").val();
-        var purchase_date = $("#purchase_date").val();;
+        var purchase_date = $("#purchase_date").val();
 
         var total_price_final = $("#total_price_final").val();
         var total_reciept = $("#total_reciept").val();
@@ -516,6 +535,19 @@
         }).get();
 
 
+        // Validate required fields
+        if(!purchase_date || !currency || !supplier_major_id)
+        {
+            alert("لطفاً تمام فیلدهای الزامی را پر کنید");
+            return;
+        }
+        
+        if(add_purchase_major_stock_id.length == 0)
+        {
+            alert("لطفاً حداقل یک جنس اضافه کنید");
+            return;
+        }
+
         $.ajax({
             type: "POST",
             data: {
@@ -534,6 +566,15 @@
             url: "server.php",
             success: function(response) {
                 alert(response);
+                if(response.indexOf("موفق") !== -1)
+                {
+                    // Reload page or clear form on success
+                    location.reload();
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX Error:", error);
+                alert("خطا در ارتباط با سرور: " + error);
             }
 
         });

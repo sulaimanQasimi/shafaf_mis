@@ -77,7 +77,19 @@
                             <div id="accordion">
                                 <?php
                                     $count = 1;
-                                    $sql_query_001 = mysqli_query($connection,"SELECT * FROM `purchased_invoices`");
+                                    $sql_query_001 = mysqli_query($connection,"SELECT 
+                                        purchase_major.id AS bill_number,
+                                        COALESCE(suppliers.full_name, '') AS supplier_name,
+                                        COALESCE(currencies.name, '') AS currency_name,
+                                        purchase_major.date AS purchase_date,
+                                        purchase_major.reciept AS total_reciept,
+                                        COALESCE((SELECT SUM(purchase_minor.purchase_price * purchase_minor.amount) FROM purchase_minor WHERE purchase_minor.purchase_major_id = purchase_major.id), 0) AS total_purchased_price,
+                                        COALESCE((SELECT SUM(purchase_minor.extra_expense * purchase_minor.amount) FROM purchase_minor WHERE purchase_minor.purchase_major_id = purchase_major.id), 0) AS total_extra_price,
+                                        COALESCE((SELECT SUM(reciepts.amount / reciepts.rate) FROM reciepts WHERE reciepts.purchase_id = purchase_major.id), 0) AS total_reciepts_price
+                                    FROM purchase_major
+                                    LEFT JOIN suppliers ON suppliers.id = purchase_major.supplier_id
+                                    LEFT JOIN currencies ON currencies.id = purchase_major.currency_id
+                                    ORDER BY purchase_major.id DESC");
                                     while ($row = mysqli_fetch_assoc($sql_query_001))
                                     {
                                         

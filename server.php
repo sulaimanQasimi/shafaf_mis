@@ -57,9 +57,9 @@
 
     if(isset($_POST["major_stock_item_id"]))
     {
-        $major_stock_item_id = $_POST["major_stock_item_id"];
+        $stock_minor_id = $_POST["major_stock_item_id"];
 
-        $sql_query_001 = mysqli_query($connection,"SELECT stock_major.id,stock_minor.item_name,stock_major.amount,unit_major.unit_name  FROM `stock_major` LEFT JOIN stock_minor ON stock_major.item_id = stock_minor.id LEFT JOIN  unit_major on unit_major.id = stock_major.unit_id where stock_major.id='$major_stock_item_id'");
+        $sql_query_001 = mysqli_query($connection,"SELECT stock_major.id,stock_minor.item_name,stock_major.amount,unit_major.unit_name  FROM `stock_major` LEFT JOIN stock_minor ON stock_major.item_id = stock_minor.id LEFT JOIN  unit_major on unit_major.id = stock_major.unit_id where stock_minor.id='$stock_minor_id' LIMIT 1");
         
         
        
@@ -534,10 +534,15 @@
 
         $purchase_date =  $_POST["purchase_date"];
      
+        // Validate required fields
+        if(empty($supplier_major_id) || empty($purchase_date) || empty($currency))
+        {
+            echo "خطا: فیلدهای الزامی خالی است";
+            exit();
+        }
         
-            $sql_query_001 = mysqli_query($connection,"INSERT INTO `purchase_major` (`id`, `supplier_id`, `reciept`, `currency_id`, `date`) VALUES (NULL, '$supplier_major_id', '$total_reciept', '$currency', '$purchase_date')");
+        $sql_query_001 = mysqli_query($connection,"INSERT INTO `purchase_major` (`id`, `supplier_id`, `reciept`, `currency_id`, `date`) VALUES (NULL, '$supplier_major_id', '$total_reciept', '$currency', '$purchase_date')");
        
-
         if($sql_query_001)
         {
             
@@ -552,40 +557,61 @@
             $details_arr = $_POST["details"];
             $purchase_major_id = $fetch_003["id"];
             
-            $sql_query_001_x = mysqli_query($connection,"INSERT INTO `reciepts` (`id`, `amount`, `currency_id`,`rate`, `purchase_id`, `sale_id`, `date`) VALUES (NULL, '$total_reciept', '$currency','$rate',  '$purchase_major_id',NULL, '$purchase_date')");
+            // Get supplier full_name
+            $sql_query_supplier = mysqli_query($connection,"SELECT full_name FROM suppliers WHERE id='$supplier_major_id' LIMIT 1");
+            $supplier_full_name = "";
+            if($sql_query_supplier && mysqli_num_rows($sql_query_supplier) > 0)
+            {
+                $fetch_supplier = mysqli_fetch_assoc($sql_query_supplier);
+                $supplier_full_name = mysqli_real_escape_string($connection, $fetch_supplier["full_name"]);
+            }
+            
+            // Insert receipt
+            $sql_query_001_x = mysqli_query($connection,"INSERT INTO `reciepts` (`id`, `full_name`, `amount`, `currency_id`,`rate`, `purchase_id`, `sale_id`, `date`, `details`) VALUES (NULL, '$supplier_full_name', '$total_reciept', '$currency','$rate',  '$purchase_major_id',NULL, '$purchase_date', '')");
+            
+            if(!$sql_query_001_x)
+            {
+                echo "خطا در ذخیره رسید: " . mysqli_error($connection);
+                exit();
+            }
 
+            $success_count = 0;
+            $failed_count = 0;
+            
             for ($i=0; $i < count($add_purchase_major_stock_id_arr); $i++)
             {
                 
-                $add_purchase_major_stock_id = $add_purchase_major_stock_id_arr[$i];
-                $amount = $amount_arr[$i];
-                $purchase_price = $purchase_price_arr[$i];
-                $extra_expense = $extra_expense_arr[$i];
-                $details = $details_arr[$i];
+                $add_purchase_major_stock_id = mysqli_real_escape_string($connection, $add_purchase_major_stock_id_arr[$i]);
+                $amount = mysqli_real_escape_string($connection, $amount_arr[$i]);
+                $purchase_price = mysqli_real_escape_string($connection, $purchase_price_arr[$i]);
+                $extra_expense = mysqli_real_escape_string($connection, $extra_expense_arr[$i]);
+                $details = mysqli_real_escape_string($connection, $details_arr[$i]);
 
-               
+                $sql_query_002 = mysqli_query($connection,"INSERT INTO `purchase_minor` (`id`,`purchase_major_id`, `item_id_stock_major`, `amount`, `purchase_price`, `extra_expense`,`details`) VALUES (NULL, '$purchase_major_id','$add_purchase_major_stock_id', '$amount', '$purchase_price', '$extra_expense','$details')");
                 
-
-                $sql_query_002 = mysqli_query($connection,"INSERT INTO `purchase_minor` (`id`,`purchase_major_id`, `item_id_stock_major`, `amount`, `purchase_price`, `extra_expense`,`details`) VALUES (NULL, '$purchase_major_id','$add_purchase_major_stock_id', '$amount', '$purchase_price', '$extra_expense','$details')
-                ");
-
-                
-                    if ($sql_query_002)
-                    {
-                        echo "success";
-                    }
-                    else
-                    {
-                        echo "failed";
-                    }
-
-
-
-                // }
+                if ($sql_query_002)
+                {
+                    $success_count++;
+                }
+                else
+                {
+                    $failed_count++;
+                }
+            }
             
+            if($failed_count == 0)
+            {
+                echo "موفق: " . $success_count . " آیتم ذخیره شد";
+            }
+            else
+            {
+                echo "خطا: " . $failed_count . " آیتم ذخیره نشد. خطا: " . mysqli_error($connection);
             }
 
-
+        }
+        else
+        {
+            echo "خطا در ذخیره بل خرید: " . mysqli_error($connection);
         }
         
 
@@ -621,7 +647,16 @@
             $details_arr = $_POST["details"];
             $sale_major_id = $fetch_003["id"];
 
-            $sql_query_001_x = mysqli_query($connection,"INSERT INTO `reciepts` (`id`, `amount`, `currency_id`,`rate`, `purchase_id`, `sale_id`, `date`) VALUES (NULL, '$total_reciept', '$currency','$rate', NULL, '$sale_major_id', '$sale_date')");
+            // Get customer full_name
+            $sql_query_customer = mysqli_query($connection,"SELECT full_name FROM customers WHERE id='$customer_id' LIMIT 1");
+            $customer_full_name = "";
+            if($sql_query_customer && mysqli_num_rows($sql_query_customer) > 0)
+            {
+                $fetch_customer = mysqli_fetch_assoc($sql_query_customer);
+                $customer_full_name = mysqli_real_escape_string($connection, $fetch_customer["full_name"]);
+            }
+
+            $sql_query_001_x = mysqli_query($connection,"INSERT INTO `reciepts` (`id`, `full_name`, `amount`, `currency_id`,`rate`, `purchase_id`, `sale_id`, `date`, `details`) VALUES (NULL, '$customer_full_name', '$total_reciept', '$currency','$rate', NULL, '$sale_major_id', '$sale_date', '')");
     
             for ($i=0; $i < count($add_sale_purchase_id_arr); $i++)
             {
