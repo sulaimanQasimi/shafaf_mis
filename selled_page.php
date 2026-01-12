@@ -75,7 +75,18 @@
                             <div id="accordion">
                                 <?php
                                     $count = 1;
-                                    $sql_query_001 = mysqli_query($connection,"SELECT * FROM sold_invoices");
+                                    $sql_query_001 = mysqli_query($connection,"SELECT 
+                                        sale_major.id AS bill_number,
+                                        COALESCE(customers.full_name, '') AS customer_name,
+                                        COALESCE(currencies.name, '') AS currency_name,
+                                        sale_major.date AS sale_date,
+                                        sale_major.reciept AS total_reciept,
+                                        COALESCE((SELECT SUM(sale_minor.sale_rate * sale_minor.amount) FROM sale_minor WHERE sale_minor.sale_major_id = sale_major.id), 0) AS total_sold_price,
+                                        COALESCE((SELECT SUM(reciepts.amount / reciepts.rate) FROM reciepts WHERE reciepts.sale_id = sale_major.id), 0) AS total_reciepts_price
+                                    FROM sale_major
+                                    LEFT JOIN customers ON customers.id = sale_major.customer_id
+                                    LEFT JOIN currencies ON currencies.id = sale_major.currency_id
+                                    ORDER BY sale_major.id DESC");
                                     while ($row = mysqli_fetch_assoc($sql_query_001))
                                     {
                                         
@@ -87,12 +98,12 @@
                                         <th><?php echo $row["currency_name"]; ?></th>
                                         <th><?php  echo $row["sale_date"];?>
                                         </th>
-                                        <th><?php echo $row["total_sold_price"]; ?></th>
-                                        <th><?php echo round($row["total_reciepts_price"],2); ?></th>
-                                        <th class="text text-danger"><?php echo ($row["total_sold_price"]) - round($row["total_reciepts_price"],2); ?></th>
+                                        <th><?php echo number_format($row["total_sold_price"], 2); ?></th>
+                                        <th><?php echo number_format($row["total_reciepts_price"], 2); ?></th>
+                                        <th class="text text-danger"><?php echo number_format(($row["total_sold_price"] - $row["total_reciepts_price"]), 2); ?></th>
                                       
                                         
-                                        <th><a class="collapsed card-link" data-toggle="collapse" href="#collapse_<?php echo $count; ?>"><span class="fa fa-eye"></span> | <span class="fa fa-trash text text-danger" onclick="delete_func(<?php echo $row['bill_number']; ?>)"></span> | <a href="sales_reciepts.php?sale_id=<?php echo $row['bill_number']; ?>"><span class="fa fa-plus text text-success" ></span></a></a>
+                                        <th><a class="collapsed card-link" data-toggle="collapse" href="#collapse_<?php echo $count; ?>"><span class="fa fa-eye"></span></a> | <span class="fa fa-trash text text-danger" onclick="delete_func(<?php echo $row['bill_number']; ?>)"></span> | <a href="sales_reciepts.php?sale_id=<?php echo $row['bill_number']; ?>"><span class="fa fa-plus text text-success" ></span></a>
                                         </th>
                                     </tr>
                                                 

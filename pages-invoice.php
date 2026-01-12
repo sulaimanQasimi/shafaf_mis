@@ -108,7 +108,7 @@
                         <li class="breadcrumb-item active">صفحه بل فروش</li>
                     </ol>
                 </div>
-                <p class="page-title">صفحه بل فروش</pack>
+                <p class="page-title">صفحه بل فروش</p>
             </div>
             <!-- end page title -->
 
@@ -624,15 +624,9 @@
     $("#button_submit").on("click", function() {
         var currency = $("#currency").val();
         var rate = $("#rate").val();
-        var sale_date = $("#sale_date").val();;
-        var customer_id = $("#customer_id").val();;
-
-        var total_reciept = $("#total_reciept").val();
-
-        // var purchase_item_name = $('input[name^=purchase_item_name]').map(function(idx, elem) {
-        //     return $(elem).val();
-        // }).get();
-
+        var sale_date = $("#sale_date").val();
+        var customer_id = $("#customer_id").val();
+        var total_reciept = $("#total_reciept").val() || 0;
 
         var purchase_id = $('input[name^=purchase_id]').map(function(idx, elem) {
             return $(elem).val();
@@ -646,11 +640,22 @@
             return $(elem).val();
         }).get();
 
-
         var details = $('textarea[name^=details]').map(function(idx, elem) {
             return $(elem).val();
         }).get();
 
+        // Validate required fields
+        if(!sale_date || !currency || !customer_id)
+        {
+            alert("لطفاً تمام فیلدهای الزامی را پر کنید");
+            return;
+        }
+        
+        if(purchase_id.length == 0)
+        {
+            alert("لطفاً حداقل یک جنس اضافه کنید");
+            return;
+        }
 
         $.ajax({
             type: "POST",
@@ -668,8 +673,16 @@
             url: "server.php",
             success: function(response) {
                 alert(response);
+                if(response.indexOf("موفق") !== -1)
+                {
+                    // Reload page or clear form on success
+                    location.reload();
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX Error:", error);
+                alert("خطا در ارتباط با سرور: " + error);
             }
-
         });
 
     });

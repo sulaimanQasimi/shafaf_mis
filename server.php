@@ -624,27 +624,30 @@
         
         $currency = $_POST["currency"];
         $rate = $_POST["rate"];
-
-        $sale_date =  $_POST["sale_date"];
-        
-        $total_reciept = $_POST["total_reciept"];
+        $sale_date = $_POST["sale_date"];
+        $total_reciept = isset($_POST["total_reciept"]) ? $_POST["total_reciept"] : 0;
         $customer_id = $_POST["customer_id"];
-     
         
-            $sql_query_001 = mysqli_query($connection,"INSERT INTO `sale_major` (`id`, `customer_id`, `reciept`, `currency_id`, `date`) VALUES (NULL, '$customer_id', '$total_reciept', '$currency', '$sale_date')");
-
+        // Validate required fields
+        if(empty($customer_id) || empty($sale_date) || empty($currency))
+        {
+            echo "خطا: فیلدهای الزامی خالی است";
+            exit();
+        }
+        
+        $add_sale_purchase_id_arr = $_POST["add_sale_purchase_id"];
+        if(empty($add_sale_purchase_id_arr) || count($add_sale_purchase_id_arr) == 0)
+        {
+            echo "خطا: لطفاً حداقل یک جنس اضافه کنید";
+            exit();
+        }
+        
+        $sql_query_001 = mysqli_query($connection,"INSERT INTO `sale_major` (`id`, `customer_id`, `reciept`, `currency_id`, `date`) VALUES (NULL, '$customer_id', '$total_reciept', '$currency', '$sale_date')");
 
         if($sql_query_001)
         {
-
             $sql_query_003 = mysqli_query($connection,"SELECT sale_major.id FROM `sale_major`  ORDER BY id DESC LIMIT 1");
             $fetch_003 = mysqli_fetch_assoc($sql_query_003);
-
-            // map
-            $add_sale_purchase_id_arr = $_POST["add_sale_purchase_id"];
-            $amount_arr = $_POST["amount"];
-            $sale_price_arr = $_POST["sale_price"];
-            $details_arr = $_POST["details"];
             $sale_major_id = $fetch_003["id"];
 
             // Get customer full_name
@@ -656,39 +659,55 @@
                 $customer_full_name = mysqli_real_escape_string($connection, $fetch_customer["full_name"]);
             }
 
+            // Insert receipt
             $sql_query_001_x = mysqli_query($connection,"INSERT INTO `reciepts` (`id`, `full_name`, `amount`, `currency_id`,`rate`, `purchase_id`, `sale_id`, `date`, `details`) VALUES (NULL, '$customer_full_name', '$total_reciept', '$currency','$rate', NULL, '$sale_major_id', '$sale_date', '')");
+            
+            if(!$sql_query_001_x)
+            {
+                echo "خطا در ذخیره رسید: " . mysqli_error($connection);
+                exit();
+            }
     
+            // map
+            $amount_arr = $_POST["amount"];
+            $sale_price_arr = $_POST["sale_price"];
+            $details_arr = isset($_POST["details"]) ? $_POST["details"] : array();
+            
+            $success_count = 0;
+            $failed_count = 0;
+            
             for ($i=0; $i < count($add_sale_purchase_id_arr); $i++)
             {
+                $add_sale_purchase_id = mysqli_real_escape_string($connection, $add_sale_purchase_id_arr[$i]);
+                $amount = mysqli_real_escape_string($connection, $amount_arr[$i]);
+                $sale_price = mysqli_real_escape_string($connection, $sale_price_arr[$i]);
+                $details = isset($details_arr[$i]) ? mysqli_real_escape_string($connection, $details_arr[$i]) : '';
                 
-                $add_sale_purchase_id = $add_sale_purchase_id_arr[$i];
-                $amount = $amount_arr[$i];
-                $sale_price = $sale_price_arr[$i];
-                $details = $details_arr[$i];
+                $sql_query_002 = mysqli_query($connection,"INSERT INTO `sale_minor` (`id`, `amount`, `sale_rate`, `details`, `purchase_minor_id`,`sale_major_id`) VALUES (NULL, '$amount', '$sale_price', '$details', '$add_sale_purchase_id','$sale_major_id')");
                 
-                $sql_query_002 = mysqli_query($connection,"INSERT INTO `sale_minor` (`id`, `amount`, `sale_rate`, `details`, `purchase_minor_id`,`sale_major_id`) VALUES (NULL, '$amount', '$sale_price', '$details', '$add_sale_purchase_id','$sale_major_id')
-                ");
-                
-                
-
-                    if ($sql_query_002)
-                    {
-                        echo "success";
-                    }
-                    else
-                    {
-                        echo "failed";
-                    }
-
-
-
-                // }
-            
+                if ($sql_query_002)
+                {
+                    $success_count++;
+                }
+                else
+                {
+                    $failed_count++;
+                }
             }
-
-
+            
+            if($failed_count == 0)
+            {
+                echo "موفق: " . $success_count . " آیتم ذخیره شد";
+            }
+            else
+            {
+                echo "خطا: " . $failed_count . " آیتم ذخیره نشد. خطا: " . mysqli_error($connection);
+            }
         }
-        
+        else
+        {
+            echo "خطا در ذخیره بل فروش: " . mysqli_error($connection);
+        }
 
         exit();
         
