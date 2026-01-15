@@ -133,6 +133,47 @@
             print-color-adjust: exact !important;
             color-adjust: exact !important;
         }
+        
+        /* Force visibility of table title row - must be at top */
+        table thead tr:first-child {
+            display: table-row !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            height: auto !important;
+            max-height: none !important;
+            overflow: visible !important;
+        }
+        
+        table thead tr:first-child th {
+            display: table-cell !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        
+        table thead tr:first-child th *,
+        table thead tr:first-child th p,
+        table thead tr:first-child th p small {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        
+        table thead tr:first-child th p small {
+            display: inline !important;
+        }
+        
+        /* Force visibility of column headers row (second row) */
+        table thead tr:nth-child(2) {
+            display: table-row !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        
+        table thead tr:nth-child(2) th {
+            display: table-cell !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
 
         html, body {
             background: white !important;
@@ -256,6 +297,32 @@
         .table-responsive {
             overflow: visible !important;
             width: 100% !important;
+            display: block !important;
+        }
+        
+        /* Ensure table and all its parts are visible */
+        .table-responsive table {
+            display: table !important;
+        }
+        
+        .table-responsive table thead {
+            display: table-header-group !important;
+        }
+        
+        .table-responsive table thead tr {
+            display: table-row !important;
+        }
+        
+        .table-responsive table thead tr:first-child {
+            display: table-row !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        
+        .table-responsive table thead tr:first-child th {
+            display: table-cell !important;
+            visibility: visible !important;
+            opacity: 1 !important;
         }
 
         table {
@@ -265,12 +332,14 @@
             page-break-inside: avoid;
             table-layout: fixed !important;
             font-size: 12px !important;
+            display: table !important;
         }
 
         table thead {
             background-color: #2c3e50 !important;
             color: white !important;
             display: table-header-group !important;
+            visibility: visible !important;
         }
 
         table thead th {
@@ -282,7 +351,9 @@
             text-align: center !important;
             border: 1px solid #1a252f !important;
             word-wrap: break-word !important;
-            overflow: hidden !important;
+            overflow: visible !important;
+            visibility: visible !important;
+            display: table-cell !important;
         }
 
         table tbody {
@@ -339,11 +410,17 @@
             border: 1px solid #1a252f !important;
         }
 
-        /* Supplier Row Styling */
+        /* Supplier Row Styling - Force visibility */
         table thead tr:first-child {
             background-color: #3498db !important;
             display: table-row !important;
             visibility: visible !important;
+            opacity: 1 !important;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+            height: auto !important;
+            min-height: 50px !important;
+            max-height: none !important;
         }
 
         table thead tr:first-child th {
@@ -354,23 +431,66 @@
             border: 1px solid #2980b9 !important;
             display: table-cell !important;
             visibility: visible !important;
+            opacity: 1 !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
+            height: auto !important;
+            min-height: 50px !important;
+            max-height: none !important;
+            overflow: visible !important;
+        }
+        
+        table thead tr:first-child th[colspan] {
+            display: table-cell !important;
+            visibility: visible !important;
+            opacity: 1 !important;
         }
         
         table thead tr:nth-child(2) {
             display: table-row !important;
             visibility: visible !important;
+            opacity: 1 !important;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+            height: auto !important;
+            min-height: 40px !important;
+            background-color: #2c3e50 !important;
         }
         
         table thead tr:nth-child(2) th {
             display: table-cell !important;
             visibility: visible !important;
+            opacity: 1 !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
+            background-color: #2c3e50 !important;
+            color: white !important;
+            padding: 10px 6px !important;
+            font-size: 12px !important;
+            font-weight: bold !important;
+            text-align: center !important;
+            border: 1px solid #1a252f !important;
         }
 
         table thead tr:first-child th p {
             margin: 0 !important;
-            font-size: 13px !important;
+            font-size: 25px !important;
             font-weight: bold !important;
             color: white !important;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            height: auto !important;
+            overflow: visible !important;
+        }
+        
+        table thead tr:first-child th p small {
+            font-size: 14px !important;
+            color: white !important;
+            display: inline !important;
+            visibility: visible !important;
         }
 
         /* Column Widths */
@@ -527,6 +647,21 @@
         table tfoot {
             page-break-inside: avoid !important;
         }
+        
+        /* Ensure first row (title row) is always visible */
+        table thead tr:first-child,
+        table thead tr:first-child th {
+            display: table-row !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            height: auto !important;
+            min-height: 40px !important;
+        }
+        
+        table thead tr:first-child th[colspan] {
+            display: table-cell !important;
+            visibility: visible !important;
+        }
 
         /* Better header spacing */
         .clearfix {
@@ -594,29 +729,29 @@
                                 <div class="table-responsive">
                                     <table class="table mt-4 table-sm table-centered">
                                         <thead>
-                                            <tr>
-                                                <th colspan="2">
-                                                    <p style="text-align:center; font-size:25px;" for="search_input_id">
+                                            <tr style="display: table-row !important; visibility: visible !important; opacity: 1 !important; background-color: #3498db !important;">
+                                                <th colspan="2" style="display: table-cell !important; visibility: visible !important; opacity: 1 !important; background-color: #3498db !important; color: white !important; padding: 12px 8px !important; border: 1px solid #2980b9 !important;">
+                                                    <p style="text-align:center; font-size:25px; margin: 0; color: white !important; display: block !important; visibility: visible !important;" for="search_input_id">
                                                         تمویل کننده : </p>
                                                 </th>
-                                                <th colspan="6">
-                                                    <p style="text-align:center; font-size:18px; margin: 0;">
+                                                <th colspan="6" style="display: table-cell !important; visibility: visible !important; opacity: 1 !important; background-color: #3498db !important; color: white !important; padding: 12px 8px !important; border: 1px solid #2980b9 !important;">
+                                                    <p style="text-align:center; font-size:18px; margin: 0; color: white !important; display: block !important; visibility: visible !important;">
                                                         <?php echo $purchase_data["supplier_name"]; ?>
                                                         <?php if(!empty($purchase_data["supplier_phone"])) { ?>
-                                                            <br><small style="font-size: 14px;">تلفن: <?php echo $purchase_data["supplier_phone"]; ?></small>
+                                                            <br><small style="font-size: 14px; color: white !important; display: inline !important; visibility: visible !important;">تلفن: <?php echo $purchase_data["supplier_phone"]; ?></small>
                                                         <?php } ?>
                                                     </p>
                                                 </th>
                                             </tr>
-                                            <tr>
-                                                <th style="width: 5%">#</th>
-                                                <th style="width: 20%">جنس</th>
-                                                <th style="width: 10%">واحد خرید</th>
-                                                <th style="width: 10%">مقدار</th>
-                                                <th style="width: 10%" class="text-right">قیمت خرید | 1</th>
-                                                <th style="width: 10%" class="text-right">مصارف اضافی | 1</th>
-                                                <th style="width: 15%" class="text-right">مجموع</th>
-                                                <th style="width: 20%" class="text-right">توضیحات</th>
+                                            <tr style="display: table-row !important; visibility: visible !important; opacity: 1 !important; background-color: #2c3e50 !important;">
+                                                <th style="width: 5%; display: table-cell !important; visibility: visible !important; opacity: 1 !important; background-color: #2c3e50 !important; color: white !important; padding: 10px 6px !important; font-size: 12px !important; font-weight: bold !important; text-align: center !important; border: 1px solid #1a252f !important;">#</th>
+                                                <th style="width: 20%; display: table-cell !important; visibility: visible !important; opacity: 1 !important; background-color: #2c3e50 !important; color: white !important; padding: 10px 6px !important; font-size: 12px !important; font-weight: bold !important; text-align: center !important; border: 1px solid #1a252f !important;">جنس</th>
+                                                <th style="width: 10%; display: table-cell !important; visibility: visible !important; opacity: 1 !important; background-color: #2c3e50 !important; color: white !important; padding: 10px 6px !important; font-size: 12px !important; font-weight: bold !important; text-align: center !important; border: 1px solid #1a252f !important;">واحد خرید</th>
+                                                <th style="width: 10%; display: table-cell !important; visibility: visible !important; opacity: 1 !important; background-color: #2c3e50 !important; color: white !important; padding: 10px 6px !important; font-size: 12px !important; font-weight: bold !important; text-align: center !important; border: 1px solid #1a252f !important;">مقدار</th>
+                                                <th style="width: 10%; display: table-cell !important; visibility: visible !important; opacity: 1 !important; background-color: #2c3e50 !important; color: white !important; padding: 10px 6px !important; font-size: 12px !important; font-weight: bold !important; text-align: center !important; border: 1px solid #1a252f !important;" class="text-right">قیمت خرید | 1</th>
+                                                <th style="width: 10%; display: table-cell !important; visibility: visible !important; opacity: 1 !important; background-color: #2c3e50 !important; color: white !important; padding: 10px 6px !important; font-size: 12px !important; font-weight: bold !important; text-align: center !important; border: 1px solid #1a252f !important;" class="text-right">مصارف اضافی | 1</th>
+                                                <th style="width: 15%; display: table-cell !important; visibility: visible !important; opacity: 1 !important; background-color: #2c3e50 !important; color: white !important; padding: 10px 6px !important; font-size: 12px !important; font-weight: bold !important; text-align: center !important; border: 1px solid #1a252f !important;" class="text-right">مجموع</th>
+                                                <th style="width: 20%; display: table-cell !important; visibility: visible !important; opacity: 1 !important; background-color: #2c3e50 !important; color: white !important; padding: 10px 6px !important; font-size: 12px !important; font-weight: bold !important; text-align: center !important; border: 1px solid #1a252f !important;" class="text-right">توضیحات</th>
                                             </tr>
                                         </thead>
                                         <tbody>
