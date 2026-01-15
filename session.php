@@ -1,5 +1,8 @@
 <?php
-    session_start();
+    // Start session if not already started
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
     
     if(isset($_SESSION["username"]))
     {
@@ -7,6 +10,7 @@
     }
     else{
         header("location:index.php");
+        exit;
     }
 
 ?>

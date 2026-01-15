@@ -1,4 +1,15 @@
 <?php
+    // Start session first, before any output
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    
+    // Check if user is logged in
+    if(!isset($_SESSION["username"])) {
+        header("location:index.php");
+        exit;
+    }
+    
     include_once("database.php");
    
     // Get company settings
@@ -54,31 +65,492 @@
     }
 
     @media print {
-
-        table tr td,
-        table tr th,
-        input,
-        select {
-            font-size: 40px;
-            font-weight: bolder;
-            text-align: center !important;
+        @page {
+            size: A4;
+            margin: 10mm 15mm;
         }
 
-        .bill_number {
-            font-size: 40px;
-            font-weight: bolder;
-            color: black !important;
+        * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
         }
 
-        .print-display {
+        html, body {
+            background: white !important;
+            font-family: 'Arial', 'Tahoma', 'DejaVu Sans', sans-serif !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            height: auto !important;
+            direction: rtl !important;
+        }
+
+        .wrapper {
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+        }
+
+        .container-fluid {
+            padding: 0 !important;
+            margin: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+
+        .card-box {
+            border: none !important;
+            box-shadow: none !important;
+            padding: 10px !important;
+            margin: 0 !important;
+            background: white !important;
+            width: 100% !important;
+        }
+
+        /* Header Section */
+        .clearfix {
+            margin-bottom: 20px !important;
+            padding-bottom: 15px !important;
+            border-bottom: 2px solid #333 !important;
+            display: block !important;
+            width: 100% !important;
+        }
+
+        .clearfix .row {
+            display: table !important;
+            width: 100% !important;
+            table-layout: fixed !important;
+        }
+
+        .clearfix .row > div {
+            display: table-cell !important;
+            vertical-align: middle !important;
+            padding: 5px !important;
+        }
+
+        .clearfix .col-md-6:first-child {
+            width: 40% !important;
+        }
+
+        .clearfix .col-md-6:last-child {
+            width: 60% !important;
+            text-align: right !important;
+        }
+
+        .clearfix img,
+        .print-logo {
+            height: 50px !important;
+            max-width: 180px !important;
+            object-fit: contain !important;
+            display: block !important;
+        }
+
+        .invoice-title {
+            display: block !important;
+            font-size: 22px !important;
+            font-weight: bold !important;
+            color: #2c3e50 !important;
+            margin: 0 0 8px 0 !important;
+            text-align: right !important;
+        }
+
+        .company-name-print {
+            display: block !important;
+            font-size: 16px !important;
+            font-weight: bold !important;
+            color: #34495e !important;
+            margin: 5px 0 0 0 !important;
+            text-align: right !important;
+        }
+
+        .print-only {
+            display: block !important;
+        }
+
+        .invoice-date-print {
+            display: block !important;
+            font-size: 12px !important;
+            color: #7f8c8d !important;
+            margin: 5px 0 0 0 !important;
+            text-align: right !important;
+        }
+
+        .invoice-date-print span {
+            font-weight: bold !important;
+            color: #34495e !important;
+        }
+
+        /* Hide non-printable elements */
+        .print-display,
+        .d-print-none,
+        header,
+        footer,
+        .rightbar-overlay,
+        .modal,
+        .page-title-box,
+        .page-title-alt-bg,
+        .breadcrumb {
             display: none !important;
         }
 
-        .form-control {
-            border: none !important;
-            font-size: 40px !important;
-            font-weight: bolder;
+        /* Table Styling */
+        .table-responsive {
+            overflow: visible !important;
+            width: 100% !important;
+        }
 
+        table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+            margin: 15px 0 !important;
+            page-break-inside: avoid;
+            table-layout: fixed !important;
+            font-size: 12px !important;
+        }
+
+        table thead {
+            background-color: #2c3e50 !important;
+            color: white !important;
+            display: table-header-group !important;
+        }
+
+        table thead th {
+            background-color: #2c3e50 !important;
+            color: white !important;
+            padding: 10px 6px !important;
+            font-size: 12px !important;
+            font-weight: bold !important;
+            text-align: center !important;
+            border: 1px solid #1a252f !important;
+            word-wrap: break-word !important;
+            overflow: hidden !important;
+        }
+
+        table tbody {
+            display: table-row-group !important;
+        }
+
+        table tbody td {
+            padding: 8px 6px !important;
+            font-size: 11px !important;
+            text-align: center !important;
+            border: 1px solid #ddd !important;
+            vertical-align: middle !important;
+            word-wrap: break-word !important;
+            overflow: hidden !important;
+        }
+
+        table tbody tr {
+            page-break-inside: avoid;
+            break-inside: avoid !important;
+        }
+
+        table tbody tr:nth-child(even) {
+            background-color: #f8f9fa !important;
+        }
+
+        table tbody tr:hover {
+            background-color: #e9ecef !important;
+        }
+
+        table tfoot {
+            background-color: #34495e !important;
+            color: white !important;
+            display: table-footer-group !important;
+        }
+
+        table tfoot th {
+            background-color: #34495e !important;
+            color: white !important;
+            padding: 10px 8px !important;
+            font-size: 12px !important;
+            font-weight: bold !important;
+            text-align: right !important;
+            border: 1px solid #1a252f !important;
+            width: 20% !important;
+        }
+
+        table tfoot td {
+            background-color: #34495e !important;
+            color: white !important;
+            padding: 10px 8px !important;
+            font-size: 12px !important;
+            font-weight: bold !important;
+            text-align: center !important;
+            border: 1px solid #1a252f !important;
+        }
+
+        /* Fix tfoot colspan */
+        table tfoot tr th:first-child {
+            width: 20% !important;
+        }
+
+        table tfoot tr th:last-child {
+            width: 80% !important;
+        }
+
+        /* Form Controls in Print */
+        .form-control,
+        input[type="text"],
+        input[type="number"],
+        input[readonly],
+        input[name="purchase_item_name"],
+        input[name="purchase_date"],
+        input[name="remain_amount"],
+        input[name="unit_name"],
+        input[name="amount"],
+        input[name="purchase_price"],
+        input[name="sale_price"],
+        input[name="row_total"] {
+            border: none !important;
+            background: transparent !important;
+            font-size: 11px !important;
+            font-weight: normal !important;
+            padding: 2px 4px !important;
+            margin: 0 !important;
+            width: 100% !important;
+            text-align: center !important;
+            color: inherit !important;
+            box-shadow: none !important;
+            display: block !important;
+            min-height: auto !important;
+            height: auto !important;
+        }
+
+        select.form-control,
+        #customer_id {
+            border: none !important;
+            background: transparent !important;
+            font-size: 12px !important;
+            font-weight: bold !important;
+            padding: 4px !important;
+            margin: 0 !important;
+            width: 100% !important;
+            text-align: center !important;
+            color: white !important;
+            -webkit-appearance: none !important;
+            -moz-appearance: none !important;
+            appearance: none !important;
+            direction: rtl !important;
+        }
+
+        /* Customer Row Styling */
+        table thead tr:first-child {
+            background-color: #3498db !important;
+        }
+
+        table thead tr:first-child th {
+            background-color: #3498db !important;
+            color: white !important;
+            font-size: 13px !important;
+            padding: 12px 8px !important;
+            border: 1px solid #2980b9 !important;
+        }
+
+        table thead tr:first-child th p {
+            margin: 0 !important;
+            font-size: 13px !important;
+            font-weight: bold !important;
+            color: white !important;
+        }
+
+        table thead tr:first-child th[colspan="2"] {
+            width: 20% !important;
+        }
+
+        table thead tr:first-child th[colspan="9"] {
+            width: 80% !important;
+        }
+
+        /* Column Widths for Data Rows */
+        table thead tr:nth-child(2) th:nth-child(1),
+        table tbody td:nth-child(1) {
+            width: 5% !important;
+        }
+
+        table thead tr:nth-child(2) th:nth-child(2),
+        table tbody td:nth-child(2) {
+            width: 20% !important;
+        }
+
+        table thead tr:nth-child(2) th:nth-child(3),
+        table tbody td:nth-child(3) {
+            width: 10% !important;
+        }
+
+        table thead tr:nth-child(2) th:nth-child(4),
+        table tbody td:nth-child(4) {
+            width: 10% !important;
+        }
+
+        table thead tr:nth-child(2) th:nth-child(5),
+        table tbody td:nth-child(5) {
+            width: 8% !important;
+        }
+
+        table thead tr:nth-child(2) th:nth-child(6),
+        table tbody td:nth-child(6) {
+            width: 8% !important;
+        }
+
+        table thead tr:nth-child(2) th:nth-child(7),
+        table tbody td:nth-child(7) {
+            width: 10% !important;
+        }
+
+        table thead tr:nth-child(2) th:nth-child(8),
+        table tbody td:nth-child(8) {
+            width: 10% !important;
+        }
+
+        table thead tr:nth-child(2) th:nth-child(9),
+        table tbody td:nth-child(9) {
+            width: 10% !important;
+        }
+
+        /* Total Section */
+        #total_remain {
+            font-size: 13px !important;
+            font-weight: bold !important;
+            color: white !important;
+            display: block !important;
+            padding: 8px !important;
+        }
+
+        /* Invoice Title */
+        .bill_number {
+            font-size: 20px !important;
+            font-weight: bold !important;
+            color: #2c3e50 !important;
+            text-align: center !important;
+            margin: 15px 0 !important;
+        }
+
+        /* Additional Spacing */
+        .row {
+            margin: 0 !important;
+            display: block !important;
+        }
+
+        .col-md-12,
+        .col-sm-12 {
+            width: 100% !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        .mt-4 {
+            margin-top: 15px !important;
+        }
+
+        .mt-3 {
+            margin-top: 10px !important;
+        }
+
+        /* Footer totals styling */
+        table tfoot tr:last-child {
+            background-color: #27ae60 !important;
+            border-top: 2px solid #1e8449 !important;
+        }
+
+        table tfoot tr:last-child th,
+        table tfoot tr:last-child td {
+            background-color: #27ae60 !important;
+            font-size: 13px !important;
+            font-weight: bold !important;
+            padding: 12px 8px !important;
+        }
+
+        table tfoot tr:last-child #total_remain {
+            font-size: 14px !important;
+            font-weight: bolder !important;
+        }
+
+        /* Fix input in tfoot */
+        table tfoot input {
+            font-size: 12px !important;
+            font-weight: bold !important;
+            color: white !important;
+            background: transparent !important;
+        }
+
+        /* Invoice Info Section */
+        .invoice-info {
+            display: block !important;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #ecf0f1 !important;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+        }
+
+        .invoice-info p {
+            margin: 5px 0;
+            font-size: 13px;
+            color: #2c3e50;
+        }
+
+        /* Better spacing for table rows */
+        table tbody td input {
+            min-height: auto !important;
+            height: auto !important;
+        }
+
+        /* Hidden inputs should not take space */
+        input[type="hidden"] {
+            display: none !important;
+        }
+
+        /* Textarea in print */
+        textarea {
+            display: none !important;
+        }
+
+        /* Remove all shadows and effects */
+        * {
+            box-shadow: none !important;
+            text-shadow: none !important;
+        }
+
+        /* Print-specific spacing */
+        .card-box > * {
+            margin-bottom: 10px !important;
+        }
+
+        /* Ensure proper text rendering */
+        table th,
+        table td {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        /* Fix for RTL layout */
+        table {
+            direction: rtl !important;
+        }
+
+        table th,
+        table td {
+            text-align: center !important;
+        }
+
+        /* Page break handling */
+        @page {
+            margin: 10mm 15mm;
+        }
+
+        /* Prevent page breaks inside important elements */
+        .clearfix,
+        table thead,
+        table tfoot {
+            page-break-inside: avoid !important;
+        }
+
+        /* Better header spacing */
+        .clearfix {
+            margin-bottom: 20px !important;
+            padding-bottom: 15px !important;
         }
     }
     </style>
@@ -118,12 +590,23 @@
 
                         <!-- Logo & title -->
                         <div class="clearfix">
-                            <div class="float-left">
-                                <?php if($company_logo != "") { ?>
-                                    <img src="stuff_documents/images/<?php echo $company_logo; ?>" alt="<?php echo $company_name; ?>" height="20">
-                                <?php } else { ?>
-                                    <img src="assets/images/logo-dark.png" alt="<?php echo $company_name; ?>" height="20">
-                                <?php } ?>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="float-left">
+                                        <?php if($company_logo != "") { ?>
+                                            <img src="stuff_documents/images/<?php echo $company_logo; ?>" alt="<?php echo $company_name; ?>" height="20" class="print-logo">
+                                        <?php } else { ?>
+                                            <img src="assets/images/logo-dark.png" alt="<?php echo $company_name; ?>" height="20" class="print-logo">
+                                        <?php } ?>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <h2 class="invoice-title print-only" style="display: none;">فاکتور فروش</h2>
+                                    <h3 class="company-name-print" style="margin-top: 10px; font-size: 18px; font-weight: bold;"><?php echo $company_name; ?></h3>
+                                    <p class="invoice-date-print" style="margin-top: 10px; font-size: 14px; color: #7f8c8d; display: none;">
+                                        <span id="print_sale_date"></span>
+                                    </p>
+                                </div>
                             </div>
                         </div>
 
@@ -582,6 +1065,28 @@
     $(document).on('keyup', '.sale_price', function() {
         total_cal(count_2);
 
+    });
+
+    // Update print date when sale date changes
+    $(document).on('change', '#sale_date', function() {
+        var saleDate = $(this).val();
+        if(saleDate) {
+            // Format date for display (you can customize this format)
+            var dateObj = new Date(saleDate);
+            var formattedDate = dateObj.toLocaleDateString('fa-IR');
+            $('#print_sale_date').text('تاریخ: ' + saleDate);
+        }
+    });
+
+    // Initialize print date on page load
+    $(document).ready(function() {
+        var saleDate = $('#sale_date').val();
+        if(saleDate) {
+            $('#print_sale_date').text('تاریخ: ' + saleDate);
+        } else {
+            var today = new Date().toISOString().split('T')[0];
+            $('#print_sale_date').text('تاریخ: ' + today);
+        }
     });
     </script>
 

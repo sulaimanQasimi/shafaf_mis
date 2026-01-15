@@ -103,7 +103,7 @@
                                         <th class="text text-danger"><?php echo number_format(($row["total_sold_price"] - $row["total_reciepts_price"]), 2); ?></th>
                                       
                                         
-                                        <th><a class="collapsed card-link" data-toggle="collapse" href="#collapse_<?php echo $count; ?>"><span class="fa fa-eye"></span></a> | <span class="fa fa-trash text text-danger" onclick="delete_func(<?php echo $row['bill_number']; ?>)"></span> | <a href="sales_reciepts.php?sale_id=<?php echo $row['bill_number']; ?>"><span class="fa fa-plus text text-success" ></span></a>
+                                        <th><a class="collapsed card-link" data-toggle="collapse" href="#collapse_<?php echo $count; ?>"><span class="fa fa-eye"></span></a> | <a href="print_sale.php?sale_id=<?php echo $row['bill_number']; ?>" target="_blank"><span class="fa fa-print text text-primary" title="چاپ"></span></a> | <span class="fa fa-trash text text-danger" onclick="delete_func(<?php echo $row['bill_number']; ?>)"></span> | <a href="sales_reciepts.php?sale_id=<?php echo $row['bill_number']; ?>"><span class="fa fa-plus text text-success" ></span></a>
                                         </th>
                                     </tr>
                                                 
