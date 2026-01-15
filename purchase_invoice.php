@@ -258,9 +258,6 @@
 
                         <div class="mt-4 mb-1">
                             <div class="text-right d-print-none">
-                                <a href="javascript:window.print()"
-                                    class="btn btn-danger waves-effect btn-sm waves-light"><i
-                                        class="mdi mdi-printer mr-1"></i>چاپ</a>
                                 <button type="button" class="btn btn-sm btn-success waves-effect waves-light"
                                     id="button_submit">ذخیره</button>
                             </div>

@@ -110,7 +110,7 @@
                                         <th class="text text-danger"><?php echo ($row["total_purchased_price"] + $row["total_extra_price"]) - round($row["total_reciepts_price"],2); ?></th>
                                       
                                         
-                                        <th><a class="collapsed card-link" data-toggle="collapse" href="#collapse_<?php echo $count; ?>"><span class="fa fa-eye"></span> </a> | <span class="fa fa-trash text text-danger" onclick="delete_func(<?php echo $row['bill_number']; ?>)"></span> | <a href="reciepts.php?purchase_id=<?php echo $row['bill_number']; ?>"><span class="fa fa-plus text text-success" ></span></a>
+                                        <th><a class="collapsed card-link" data-toggle="collapse" href="#collapse_<?php echo $count; ?>"><span class="fa fa-eye"></span> </a> | <a href="print_purchase.php?purchase_id=<?php echo $row['bill_number']; ?>" target="_blank"><span class="fa fa-print text text-primary" title="چاپ"></span></a> | <span class="fa fa-trash text text-danger" onclick="delete_func(<?php echo $row['bill_number']; ?>)"></span> | <a href="reciepts.php?purchase_id=<?php echo $row['bill_number']; ?>"><span class="fa fa-plus text text-success" ></span></a>
                                         </th>
                                     </tr>
                                                 
