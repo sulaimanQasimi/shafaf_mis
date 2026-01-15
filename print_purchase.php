@@ -60,8 +60,24 @@
     
     $purchase_data = mysqli_fetch_assoc($sql_query_purchase);
     
-    // Get purchase minor items
-    $sql_query_items = mysqli_query($connection,"SELECT * FROM `purchased_items_list` where purchase_major_id='$purchase_id' ORDER BY purchase_minor_id");
+    // Get purchase minor items - using direct query instead of view
+    $sql_query_items = mysqli_query($connection,"SELECT 
+        purchase_minor.id AS purchase_minor_id,
+        purchase_minor.purchase_major_id AS purchase_major_id,
+        purchase_minor.amount AS amount,
+        purchase_minor.purchase_price AS purchase_price,
+        purchase_minor.extra_expense AS extra_expense,
+        purchase_minor.details AS details,
+        (SELECT unit_minor.unit_name FROM unit_minor WHERE unit_minor.id = (SELECT stock_major.minor_unit_id FROM stock_major WHERE stock_major.id = purchase_minor.item_id_stock_major)) AS minor_unit_name,
+        (SELECT stock_minor.item_name FROM stock_minor WHERE stock_minor.id = (SELECT stock_major.item_id FROM stock_major WHERE stock_major.id = purchase_minor.item_id_stock_major)) AS item_name
+    FROM purchase_minor
+    WHERE purchase_minor.purchase_major_id = '$purchase_id'
+    ORDER BY purchase_minor.id");
+    
+    // Check if query was successful
+    if(!$sql_query_items) {
+        die("خطا در اجرای کوئری: " . mysqli_error($connection));
+    }
     
     // Calculate totals
     $total_purchased_price = $purchase_data["total_purchased_price"];
@@ -93,6 +109,17 @@
         border: 1px solid black !important;
         color: black !important;
         font-weight: bold;
+    }
+    
+    /* Ensure table headers are always visible */
+    table thead {
+        display: table-header-group !important;
+        visibility: visible !important;
+    }
+    
+    table thead th {
+        display: table-cell !important;
+        visibility: visible !important;
     }
 
     @media print {
@@ -315,6 +342,8 @@
         /* Supplier Row Styling */
         table thead tr:first-child {
             background-color: #3498db !important;
+            display: table-row !important;
+            visibility: visible !important;
         }
 
         table thead tr:first-child th {
@@ -323,6 +352,18 @@
             font-size: 13px !important;
             padding: 12px 8px !important;
             border: 1px solid #2980b9 !important;
+            display: table-cell !important;
+            visibility: visible !important;
+        }
+        
+        table thead tr:nth-child(2) {
+            display: table-row !important;
+            visibility: visible !important;
+        }
+        
+        table thead tr:nth-child(2) th {
+            display: table-cell !important;
+            visibility: visible !important;
         }
 
         table thead tr:first-child th p {
