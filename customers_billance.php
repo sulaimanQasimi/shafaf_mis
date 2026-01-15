@@ -1,6 +1,31 @@
 <?php
     include("database.php");
     include("jdf.php");
+    
+    // Create the view if it doesn't exist
+    // First drop if exists, then create
+    mysqli_query($connection, "DROP VIEW IF EXISTS `sales_to_customers_list`");
+    
+    $create_view_sql = "CREATE VIEW `sales_to_customers_list` AS 
+        SELECT 
+            `customers`.`id` AS `id`, 
+            `customers`.`full_name` AS `full_name`, 
+            `customers`.`phone_number` AS `phone_number`, 
+            `customers`.`address` AS `address`, 
+            `customers`.`date` AS `date`, 
+            COALESCE(SUM(`sale_minor`.`sale_rate` * `sale_minor`.`amount`), 0) AS `total_sale_price` 
+        FROM 
+            `customers` 
+            LEFT JOIN `sale_major` ON `customers`.`id` = `sale_major`.`customer_id` 
+            LEFT JOIN `sale_minor` ON `sale_minor`.`sale_major_id` = `sale_major`.`id` 
+        GROUP BY 
+            `customers`.`id`, 
+            `customers`.`full_name`, 
+            `customers`.`phone_number`, 
+            `customers`.`address`, 
+            `customers`.`date`";
+    
+    mysqli_query($connection, $create_view_sql);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,7 +75,7 @@
                             <li class="breadcrumb-item active"> نمایش بیلانس مشتریان   </li>
                         </ol>
                     </div>
-                    <p class="page-title">نمایش بیلانس مشتریان   </pack>
+                    <p class="page-title">نمایش بیلانس مشتریان</p>
                 </div> 
                 <!-- end page title -->
 
@@ -77,28 +102,40 @@
                                     <?php
                                         $count = 1;
                                         $sql_query_001 = mysqli_query($connection,"SELECT * FROM `sales_to_customers_list`");
-                                        while ($row = mysqli_fetch_assoc($sql_query_001))
-                                        {   
-                                            $customer_id = $row["id"];
-                                            $sql_query_002 = mysqli_query($connection,"SELECT SUM(reciepts.amount/ reciepts.rate) as total_reciepts from reciepts LEFT JOIN sale_major ON reciepts.sale_id = sale_major.id  WHERE sale_major.customer_id = '$customer_id'");
-                                            $fetch_002 = mysqli_fetch_assoc($sql_query_002);
+                                        
+                                        if($sql_query_001 === false) {
+                                            echo "<tr><td colspan='7' class='text-danger'>خطا در دریافت اطلاعات: " . mysqli_error($connection) . "</td></tr>";
+                                        } else {
+                                            while ($row = mysqli_fetch_assoc($sql_query_001))
+                                            {   
+                                                $customer_id = $row["id"];
+                                                $sql_query_002 = mysqli_query($connection,"SELECT SUM(reciepts.amount/ reciepts.rate) as total_reciepts from reciepts LEFT JOIN sale_major ON reciepts.sale_id = sale_major.id  WHERE sale_major.customer_id = '$customer_id'");
+                                                
+                                                $total_reciepts = 0;
+                                                if($sql_query_002 !== false) {
+                                                    $fetch_002 = mysqli_fetch_assoc($sql_query_002);
+                                                    if($fetch_002 && isset($fetch_002["total_reciepts"])) {
+                                                        $total_reciepts = $fetch_002["total_reciepts"];
+                                                    }
+                                                }
+                                                
+                                                $total_sale_price = isset($row["total_sale_price"]) ? $row["total_sale_price"] : 0;
+                                                $total_remain = $total_sale_price - round($total_reciepts, 2);
 
-                                        ?>
-                                        <tr>
-                                            <td><?php echo $count; ?></td>
-                                            <td><?php echo $row["full_name"]; ?>  </td>
-                                            <td><?php echo $row["phone_number"]; ?></td>
-                                            <td><?php echo $row["address"]; ?></td>
-                                            <td class="text text-success"><?php echo $row["total_sale_price"]; ?></td>
-                                            <td class="text text-primary"><?php echo round($fetch_002["total_reciepts"],2); ?></td>
-                                            <td class="text text-danger"><?php echo $row["total_sale_price"] - round($fetch_002["total_reciepts"],2); ?></td>
-                                            
-                                            
-                                        </tr>
-                                        <?php
-                                        $count++;
+                                            ?>
+                                            <tr>
+                                                <td><?php echo $count; ?></td>
+                                                <td><?php echo isset($row["full_name"]) ? $row["full_name"] : ''; ?></td>
+                                                <td><?php echo isset($row["phone_number"]) ? $row["phone_number"] : ''; ?></td>
+                                                <td><?php echo isset($row["address"]) ? $row["address"] : ''; ?></td>
+                                                <td class="text text-success"><?php echo number_format($total_sale_price, 2); ?></td>
+                                                <td class="text text-primary"><?php echo number_format(round($total_reciepts, 2), 2); ?></td>
+                                                <td class="text text-danger"><?php echo number_format($total_remain, 2); ?></td>
+                                            </tr>
+                                            <?php
+                                            $count++;
+                                            }
                                         }
-                                    
                                     ?>
                                  
                                 </tbody>

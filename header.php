@@ -382,39 +382,39 @@ else
                 <ul class="navigation-menu">
 
                     <li class="has-submenu">
-                        <a href="home.php" class="lang" key="main-page">
+                        <a href="home.php">
                             <i class="dripicons-meter"></i>
                             <span class="d-none d-lg-inline">صفحه اصلی</span>
                         </a>
                     </li>
                     <li class="has-submenu">
-                        <a href="#" class="lang" key="sales">
+                        <a href="#">
                             <i class="mdi mdi-sale"></i>
                             <span class="d-none d-lg-inline">فروش</span>
                             <div class="arrow-down"></div>
                         </a>
                         <ul class="submenu">
                             <li>
-                                <a class="lang" key="page-invoice" href="pages-invoice.php"></a>
+                                <a href="pages-invoice.php">صفحه ث فروش</a>
                             </li>
                             <li>
-                                <a class="lang" key="selled_page" href="selled_page.php"></a>
+                                <a href="selled_page.php">نمایش صفحه فروش</a>
                             </li>
                             
                         </ul>
                     </li>
                     <li class="has-submenu">
-                        <a href="#" class="lang" key="purchase">
+                        <a href="#">
                             <i class="mdi mdi-cart"></i>
                             <span class="d-none d-lg-inline">خرید</span>
                             <div class="arrow-down"></div>
                         </a>
                         <ul class="submenu">
                             <li>
-                                <a class="lang" key="purchase_invoice" href="purchase_invoice.php"></a>
+                                <a href="purchase_invoice.php">صفحه بل خرید</a>
                             </li>
                             <li>
-                                <a class="lang" key="purchased_items" href="purchased_items.php"></a>
+                                <a href="purchased_items.php">نمایش صفحه خرید</a>
                             </li>
                             
                         </ul>
@@ -423,48 +423,48 @@ else
                     
 
                     <li class="has-submenu">
-                        <a href="#" class="lang" key="employees" >
+                        <a href="#">
                             <i class="icon-user-following"></i>
                             <span class="d-none d-lg-inline">کارمندان</span>
                             <div class="arrow-down"></div>
                         </a>
                         <ul class="submenu">
                             <li>
-                                <a class="lang" key="register_employee"  href="register_employee.php"></a>
+                                <a href="register_employee.php">ثبت کارمند</a>
                             </li>
                             <li>
-                                <a class="lang" key="registered_employees"  href="registered_employees.php"></a>
+                                <a href="registered_employees.php">کارمندان ثبت شده</a>
                             </li>
                             <hr>
                             <li>
-                                <a class="lang" key="register_user"  href="register_user.php"></a>
+                                <a href="register_user.php">ثبت کاربر</a>
                             </li>
                             <li>
-                                <a class="lang" key="registered_users"  href="registered_users.php"></a>
+                                <a href="registered_users.php">کاربران ثبت شده</a>
                             </li>
                         </ul>
                     </li>
                     <li class="has-submenu">
-                        <a href="#" class="lang" key="suppliers">
+                        <a href="#">
                             <i class="mdi mdi-account-badge-horizontal"></i>
                             <span class="d-none d-lg-inline">تامین کنندگان</span>
                             <div class="arrow-down"></div>
                         </a>
                         <ul class="submenu">
                             <li>
-                                <a class="lang" key="register_supplier" href="register_supplier.php"></a>
+                                <a href="register_supplier.php">ثبت تامین کننده</a>
                             </li>
                             <li>
-                                <a class="lang" key="registered_suppliers" href="registered_suppliers.php"></a>
+                                <a href="registered_suppliers.php">تامین کنندگان ثبت شده</a>
                             </li>
                             <li>
-                                <a class="lang" key="suppliers_billance" href="suppliers_billance.php"></a>
+                                <a href="suppliers_billance.php">بیلانس تامین کنندگان</a>
                             </li>
                             
                         </ul>
                     </li>
                     <li class="has-submenu">
-                        <a href="#" class="lang" key="items" >
+                        <a href="#">
                             <i class="mdi mdi-source-branch"></i>
                             <span class="d-none d-lg-inline">کالاها</span>
                             <div class="arrow-down"></div>
@@ -472,81 +472,64 @@ else
                         <ul class="submenu">
                          
                             <li>
-                                <a class="lang" key="register_exist_good"  href="register_exist_good.php"></a>
+                                <a href="register_exist_good.php">ثبت کالای موجود</a>
                             </li>
                             <li>
-                                <a  class="lang" key="stock_minor_units" href="stock_minor_units.php"></a>
+                                <a href="stock_minor_units.php">موجودی واحدهای فرعی</a>
                             </li>
                             <hr>
                             <li>
-                                <a  class="lang" key="register_good" href="register_good.php"></a>
+                                <a href="register_good.php">ثبت کالا</a>
                             </li>
                             <li>
-                                <a class="lang" key="registered_goods"  href="registered_goods.php"></a>
+                                <a href="registered_goods.php">کالاهای ثبت شده</a>
                             </li>
 
                         </ul>
                     </li>
                     <li class="has-submenu">
-                        <a href="#" class="lang" key="expenses">
+                        <a href="#">
                             <i class="mdi mdi-home-currency-usd"></i>
                             <span class="d-none d-lg-inline">مخارج</span>
                             <div class="arrow-down"></div>
                         </a>
                         <ul class="submenu">
                             <li>
-                                <a class="lang" key="register_expense" href="register_expense.php"></a>
+                                <a href="register_expense.php">ثبت مخارج</a>
                             </li>
                             <li>
-                                <a class="lang" key="registered_expenses" href="registered_expenses.php"></a>
+                                <a href="registered_expenses.php">مخارج ثبت شده</a>
                             </li>
                             <li>
-                                <a class="lang" key="register_expense_category" href="register_expense_category.php"></a>
+                                <a href="register_expense_category.php">ثبت دسته مخارج</a>
                             </li>
                             <li>
-                                <a class="lang" key="registered_expenses_category" href="registered_expenses_category.php"></a>
+                                <a href="registered_expenses_category.php">دسته‌های مخارج ثبت شده</a>
                             </li>
                             
                         </ul>
                     </li>
                     <li class="has-submenu">
-                        <a href="#" class="lang" key="customers">
+                        <a href="#">
                             <i class="mdi mdi-account-group"></i>
                             <span class="d-none d-lg-inline">مشتریان</span>
                             <div class="arrow-down"></div>
                         </a>
                         <ul class="submenu">
                             <li>
-                                <a class="lang" key="register_customer" href="register_customer.php"></a>
+                                <a href="register_customer.php">ثبت مشتری</a>
                             </li>
                             <li>
-                                <a class="lang" key="registered_customers" href="registered_customers.php"></a>
+                                <a href="registered_customers.php">مشتریان ثبت شده</a>
                             </li>
                             <li>
-                                <a class="lang" key="customers_billance" href="customers_billance.php"></a>
+                                <a href="customers_billance.php">بیلانس مشتریان</a>
                             </li>
                             
                         </ul>
                     </li>
                     <li class="has-submenu">
-                        <a href="#" class="lang" key="language">
-                            <i class="mdi mdi-translate"></i>
-                            <span class="d-none d-lg-inline">زبان</span>
-                            <div class="arrow-down"></div>
-                        </a>
-                        <ul class="submenu">
-                            <li>
-                                <a href="#" class="translate lang" key="en-gb" id="en-gb">English</a> 
-                            </li>
-                           
-                            <li>
-                            <a href="#" class="translate lang"  key="fa" id="fa">persian</a> 
-                            </li>
-                           
-                        </ul>
-                    </li>
-                    <li class="has-submenu">
-                        <a href="#" class="lang" key="settings">
+                        <a href="#">
                             <i class="mdi mdi-settings"></i>
                             <span class="d-none d-lg-inline">تنظیمات</span>
                             <div class="arrow-down"></div>
@@ -567,24 +550,24 @@ else
                         </ul>
                     </li>
                     <li class="has-submenu">
-                        <a href="#" class="lang" key="units">
+                        <a href="#">
                             <i class="mdi mdi-format-list-checkbox"></i>
                             <span class="d-none d-lg-inline">واحدها</span>
                             <div class="arrow-down"></div>
                         </a>
                         <ul class="submenu">
                             <li>
-                                <a class="lang" key="register_minor_unit" href="register_minor_unit.php"></a>
+                                <a href="register_minor_unit.php">ثبت واحد فرعی</a>
                             </li>
                             <li>
-                                <a class="lang" key="registered_minor_units" href="registered_minor_units.php"></a>
+                                <a href="registered_minor_units.php">واحدهای فرعی ثبت شده</a>
                             </li>
                             <hr>
                             <li>
-                                <a class="lang" key="register_major_unit" href="register_major_unit.php"></a>
+                                <a href="register_major_unit.php">ثبت واحد اصلی</a>
                             </li>
                             <li>
-                                <a class="lang" key="registered_major_units" href="registered_major_units.php"></a>
+                                <a href="registered_major_units.php">واحدهای اصلی ثبت شده</a>
                             </li>
                             
                         </ul>
